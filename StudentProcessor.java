@@ -1,7 +1,10 @@
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class StudentProcessor {
+    private static final Logger LOGGER = Logger.getLogger(StudentProcessor.class.getName());
     private final StudentReader reader;
 
     public StudentProcessor(StudentReader reader) {
@@ -9,8 +12,20 @@ public class StudentProcessor {
     }
 
     public <R> R executeOperation(String filePath, StudentOperation<R> operation) throws IOException {
-        List<Student> students = reader.read(filePath);
-        return operation.process(students);
+        LOGGER.info("A iniciar a leitura do ficheiro: " + filePath);
+        
+        try {
+            List<Student> students = reader.read(filePath);
+            LOGGER.info("Ficheiro lido com sucesso. Total de registos: " + students.size());
+            
+            LOGGER.info("A executar a operação nos dados...");
+            R result = operation.process(students);
+            LOGGER.info("Operação concluída com sucesso.");
+            return result;
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Erro ao processar o ficheiro: " + filePath, e);
+            throw e;
+        }
     }
 }
 
