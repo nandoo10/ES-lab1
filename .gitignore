@@ -1,0 +1,14 @@
+# Compilação e binários do Java
+*.class
+bin/
+out/
+*.jar
+
+# Ficheiros de dados (exigência explícita do enunciado)
+*.csv
+data/
+
+# Definições do VS Code e SO
+.vscode/
+.DS_Store
+Thumbs.db
